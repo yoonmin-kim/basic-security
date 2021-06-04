@@ -33,12 +33,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
         http
                 .formLogin()
-                //.loginPage("/loginPage")
-                .defaultSuccessUrl("/")
-                .failureUrl("/login")
-                .usernameParameter("userId")
-                .passwordParameter("passwd")
-                .loginProcessingUrl("/login_proc")
+                //.loginPage("/loginPage") //사용자 정의 로그인 페이지
+                .defaultSuccessUrl("/") //로그인 성공 후 이동 페이지
+                .failureUrl("/login") //로그인 실패 후 이동 페이지
+                .usernameParameter("userId") //아이디 파라미터명 설정
+                .passwordParameter("passwd") //패스워드 파라미터명 설정
+                .loginProcessingUrl("/login_proc") //로그인 Form Action Url
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -56,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
         http
                 .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                .logoutUrl("/logout") //로그아웃처리 url
+                .logoutSuccessUrl("/login") //로그아웃 성공 후 이동페이지
                 .addLogoutHandler(new LogoutHandler() {
                     @Override
                     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -71,11 +71,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/login");
                     }
                 })
-                .deleteCookies("remember-me");
+                .deleteCookies("remember-me"); //로그아웃 후 쿠키삭제
         http
                 .rememberMe()
-                .rememberMeParameter("remember")
-                .tokenValiditySeconds(3600)
+                .rememberMeParameter("remember") //기본 파라미터명은 remember-me
+                .tokenValiditySeconds(3600) // Default는 14일
+                .alwaysRemember(true) //리멤버 미 기능이 활성화되지 않아도 항상 실행
                 .userDetailsService(userDetailsService);
+
+        http //동시세션제어
+                .sessionManagement()
+                .invalidSessionUrl("/invalid") //세션이 유효하지 않을 때 이동 할 페이지
+                .maximumSessions(1) //최대 허용 가능 세션수 , -1 : 무제한 로그인 세션 허용
+                .maxSessionsPreventsLogin(false) //동시 로그인 차단함, false: 기존세션만료(default)
+                .expiredUrl("/expired"); //세션이 만료된 경우 이동할 페이지
+
+        http //세션고정보호
+                .sessionManagement()
+                .sessionFixation().changeSessionId();
     }
 }
