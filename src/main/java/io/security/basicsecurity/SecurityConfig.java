@@ -125,7 +125,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/denied");
                     }
                 });
-        http
+        http //Default는 csrf사용
                 .csrf();
     }
 }
