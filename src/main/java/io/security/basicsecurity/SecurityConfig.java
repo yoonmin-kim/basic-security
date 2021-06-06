@@ -125,5 +125,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/denied");
                     }
                 });
+        http
+                .csrf();
     }
 }
