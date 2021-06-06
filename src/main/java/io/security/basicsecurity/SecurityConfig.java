@@ -61,10 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        RequestCache requestCache = new HttpSessionRequestCache();
-                        SavedRequest savedRequest = requestCache.getRequest(request, response);
-                        String redirectUrl = savedRequest.getRedirectUrl();
-                        response.sendRedirect(redirectUrl);
+//                        RequestCache requestCache = new HttpSessionRequestCache();
+//                        SavedRequest savedRequest = requestCache.getRequest(request, response);
+//                        String redirectUrl = savedRequest.getRedirectUrl();
+//                        response.sendRedirect(redirectUrl);
+                        response.sendRedirect("/");
                     }
                 })
                 .failureHandler(new AuthenticationFailureHandler() {
@@ -97,8 +98,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe()
                 .rememberMeParameter("remember") //기본 파라미터명은 remember-me
                 .tokenValiditySeconds(3600) // Default는 14일
-                .alwaysRemember(true) //리멤버 미 기능이 활성화되지 않아도 항상 실행
-                .userDetailsService(userDetailsService);
+                .alwaysRemember(false) //리멤버 미 기능이 활성화되지 않아도 항상 실행
+                .userDetailsService(userDetailsService)
+                ;
 
         http //동시세션제어
                 .sessionManagement()
@@ -111,20 +113,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionFixation().changeSessionId();
 
-        http //인증,인가 예외처리
-                .exceptionHandling()
-                .authenticationEntryPoint(new AuthenticationEntryPoint() {
-                    @Override
-                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-                        response.sendRedirect("/login");
-                    }
-                })
-                .accessDeniedHandler(new AccessDeniedHandler() {
-                    @Override
-                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-                        response.sendRedirect("/denied");
-                    }
-                });
+//        http //인증,인가 예외처리
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new AuthenticationEntryPoint() {
+//                    @Override
+//                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+//                        //response.sendRedirect("/login");
+//                    }
+//                })
+//                .accessDeniedHandler(new AccessDeniedHandler() {
+//                    @Override
+//                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
+//                        response.sendRedirect("/denied");
+//                    }
+//                });
         http //Default는 csrf사용
                 .csrf();
     }
