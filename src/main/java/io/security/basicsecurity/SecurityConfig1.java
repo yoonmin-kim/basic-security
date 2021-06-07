@@ -31,7 +31,7 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter{
         http
                 .authorizeRequests()
                 .anyRequest().permitAll()
-                .and()
+        .and()
                 .formLogin()
         ;
     }
