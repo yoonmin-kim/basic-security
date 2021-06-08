@@ -1,4 +1,4 @@
-package io.security.basicsecurity;
+package io.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
