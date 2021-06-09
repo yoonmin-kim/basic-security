@@ -130,7 +130,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                });
         http //Default는 csrf사용
                 .csrf();
-
         //SecurityContext 모드전략, 자식쓰레드에서 부모의 SecurityContext를 참조 가능하도록 설정
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
     }
